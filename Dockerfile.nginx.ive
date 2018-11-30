@@ -1,0 +1,25 @@
+FROM nginx:stable
+
+RUN apt-get update -qq && apt-get install -y geoip-database wget
+
+# get geoip nginx module
+RUN wget http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz
+RUN gunzip GeoIP.dat.gz
+RUN wget http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz
+RUN gunzip GeoLiteCity.dat.gz
+
+# setup geoip nginx module
+RUN mkdir /etc/nginx/geoip/
+RUN mv GeoIP.dat /etc/nginx/geoip/
+RUN mv GeoLiteCity.dat /etc/nginx/geoip/
+
+# include nginx configuration
+COPY nginx.live.conf /etc/nginx/nginx.conf
+
+# sets command prompt look
+ENV PS1="\[\e[0;33m\]\u\[\e[0;36m\]@\[\e[0;36m\]\h \[\e[0;37m\]\w \[\e[0;33m\]$ \[\e[0m\]"
+
+# does not actually publish the port;
+# it functions as a type of documentation between the person who builds the image
+# and the person who runs the container
+EXPOSE 5555

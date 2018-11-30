@@ -1,0 +1,18 @@
+version: "3.5"
+
+services:
+    mps_backend_nginx:
+        build:
+            context: .
+            dockerfile: Dockerfile.nginx.dev
+        image: mps_backend/nginx
+        container_name: mps_backend_nginx_dev
+        hostname: nginx
+        stdin_open: true
+        tty: true
+        ports:
+            - "7777:5555"
+
+networks:
+    default:
+        name: mps_backend_nginx_dev
