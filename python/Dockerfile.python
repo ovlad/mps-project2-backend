@@ -1,10 +1,10 @@
 FROM python:2.7.15-alpine3.8
 
 # create and set the current directory
-WORKDIR /data/
+WORKDIR /data/mps
 
 # copy all the project
-COPY .. .
+COPY . .
 
 # import dumb_init
 ADD ./dumb-init_1.2.1_amd64 /usr/local/bin/dumb-init
@@ -13,7 +13,7 @@ RUN chmod +x /usr/local/bin/dumb-init
 # install python modules
 RUN pip install -r requirements.txt
 
-# create group 'io' and user 'atlas' && change owner of the project
+# create group 'mps and user 'mps' && change owner of the project
 RUN addgroup mps && \
     adduser -D -G mps mps && \
     chown -R mps:mps /data/mps

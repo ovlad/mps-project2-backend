@@ -1,10 +1,10 @@
 version: "3.5"
 
 services:
-  backend_nodjs:
+  mps_backend_python:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.python
     image: mps_backend/python
     container_name: mps_backend_python_dev
     hostname: dev
@@ -12,10 +12,9 @@ services:
     tty: true
     volumes:
       - ./:/data/mps
-      - /data/mps/node_modules # prevents node_modules folder to be shared
-    # runs private.js and prevent 'node private.js' process to have id 1 inside the container
+    # runs server.py and prevent 'python server.py' process to have id 1 inside the container
     entrypoint: ["dumb-init", "python", "src/server.py"]
 
 networks:
   default:
-    name: mps_backend_python_live
+    name: mps_backend_dev

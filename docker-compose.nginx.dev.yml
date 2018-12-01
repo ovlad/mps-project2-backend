@@ -15,4 +15,4 @@ services:
 
 networks:
     default:
-        name: mps_backend_nginx_dev
+        name: mps_backend_dev
