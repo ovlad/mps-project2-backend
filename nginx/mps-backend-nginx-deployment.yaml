@@ -1,0 +1,25 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose --file ./nginx/docker-compose.live.yml convert
+    kompose.version: 1.16.0 (0c01309)
+  labels:
+    io.kompose.service: mps-backend-nginx
+  name: mps-backend-nginx
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        io.kompose.service: mps-backend-nginx
+    spec:
+      containers:
+        - image: gcr.io/mps-project2-backend/nodejs:v1
+          name: mps-backend-nginx-live
+          resources: {}
+          stdin: true
+          tty: true
+      hostname: nginx
+      restartPolicy: Always
