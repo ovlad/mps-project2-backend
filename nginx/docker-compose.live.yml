@@ -4,9 +4,9 @@ services:
     mps_backend_nginx:
         build:
             context: .
-            dockerfile: Dockerfile.nginx.dev
+            dockerfile: Dockerfile.live
         image: mps_backend/nginx
-        container_name: mps_backend_nginx_dev
+        container_name: mps_backend_nginx_live
         hostname: nginx
         stdin_open: true
         tty: true
@@ -15,4 +15,4 @@ services:
 
 networks:
     default:
-        name: mps_backend_dev
+        name: mps_backend_live

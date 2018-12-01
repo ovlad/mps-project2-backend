@@ -4,7 +4,7 @@ services:
   mps_backend_nodejs:
     build:
       context: .
-      dockerfile: Dockerfile.nodejs
+      dockerfile: Dockerfile
     image: mps_backend/nodejs
     container_name: mps_backend_nodejs_dev
     hostname: dev
