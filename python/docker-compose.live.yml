@@ -1,0 +1,18 @@
+version: "3.5"
+
+services:
+  mps_backend_python:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: mps_backend/python
+    container_name: mps_backend_python_live
+    hostname: live
+    stdin_open: true
+    tty: true
+    # runs server.py and prevent 'python server.py' process to have id 1 inside the container
+#    entrypoint: ["dumb-init", "python", "src/server.py"]
+
+networks:
+  default:
+    name: mps_backend_live
