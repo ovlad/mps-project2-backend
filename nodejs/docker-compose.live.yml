@@ -1,4 +1,3 @@
-#version: "3.5"
 version: "3"
 
 services:
@@ -11,9 +10,3 @@ services:
     hostname: live
     stdin_open: true
     tty: true
-    # runs private.js and prevent 'node private.js' process to have id 1 inside the container
-#    entrypoint: ["dumb-init", "node", "src/server.js"]
-#
-#networks:
-#  default:
-#    name: mps_backend_live
