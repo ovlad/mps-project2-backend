@@ -14,7 +14,7 @@ services:
       - ./:/data/mps
       - /data/mps/node_modules # prevents node_modules folder to be shared
     # runs private.js and prevent 'node private.js' process to have id 1 inside the container
-    entrypoint: ["dumb-init", "node", "src/server.js"]
+#    entrypoint: ["dumb-init", "node", "src/server.js"]
 
 networks:
   default:
