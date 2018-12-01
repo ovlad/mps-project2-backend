@@ -31,4 +31,4 @@ USER mps
 
 # start the server
 #CMD dumb-init python src/server.py
-CMD python src/server.py
+CMD ["python", "src/server.py"]

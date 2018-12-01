@@ -1,0 +1,17 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: mps-backend-nodejs
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    spec:
+      containers:
+        - image: gcr.io/mps-project2-backend/nodejs:v1
+          name: mps-backend-nodejs-live
+          resources: {}
+          stdin: true
+          tty: true
+      hostname: live
+      restartPolicy: Always

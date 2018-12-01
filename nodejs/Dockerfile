@@ -31,4 +31,4 @@ USER mps
 
 # start the server
 #CMD dumb-init node src/server.js
-CMD node src/server.js
+CMD ["node",  "src/server.js"]
