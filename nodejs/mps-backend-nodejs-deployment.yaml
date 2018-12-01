@@ -1,11 +1,19 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
+  annotations:
+    kompose.cmd: kompose --file ./nodejs/docker-compose.live.yml convert
+    kompose.version: 1.16.0 (0c01309)
+  labels:
+    io.kompose.service: mps-backend-nodejs
   name: mps-backend-nodejs
 spec:
   replicas: 1
   strategy: {}
   template:
+    metadata:
+      labels:
+        io.kompose.service: mps-backend-nodejs
     spec:
       containers:
         - image: gcr.io/mps-project2-backend/nodejs:v1
