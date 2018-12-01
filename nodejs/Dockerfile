@@ -28,3 +28,6 @@ EXPOSE 7000
 
 # changes user to atlas
 USER mps
+
+# start the server
+CMD dumb-init node src/server.js

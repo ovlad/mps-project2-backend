@@ -28,3 +28,5 @@ EXPOSE 7000
 
 # changes user to atlas
 USER mps
+
+CMD dumb-init", "python", "src/server.py
