@@ -1,0 +1,63 @@
+<html>
+<head>
+    <title>Auth Example</title>
+</head>
+<body>
+<button onclick="googleButton()">Login with Google</button>
+<script src="https://www.gstatic.com/firebasejs/5.6.0/firebase.js"></script>
+<script>
+    // Initialize Firebase
+    let config = {
+        apiKey: "AIzaSyDTlCeFd9GNRPvqBQN0L_H1GIzV0emf4Go",
+        authDomain: "mps2-576b4.firebaseapp.com",
+        databaseURL: "https://mps2-576b4.firebaseio.com",
+        projectId: "mps2-576b4",
+        storageBucket: "mps2-576b4.appspot.com",
+        messagingSenderId: "197860313972"
+    };
+
+    firebase.initializeApp(config);
+
+    let user = firebase.auth().currentUser;
+
+    if (user != null) {
+        user.providerData.forEach(function (profile) {
+            console.log("Sign-in provider: " + profile.providerId);
+            console.log("  Provider-specific UID: " + profile.uid);
+            console.log("  Name: " + profile.displayName);
+            console.log("  Email: " + profile.email);
+            console.log("  Photo URL: " + profile.photoURL);
+        });
+    } else {
+        console.log('user', user); // user null
+    }
+
+    firebase.auth().getRedirectResult().then(function(result) {
+        // The signed-in user info.
+        let user = result.user;
+        user.providerData.forEach(function (profile) {
+            console.log("Sign-in provider: " + profile.providerId);
+            console.log("  Provider-specific UID: " + profile.uid);
+            console.log("  Name: " + profile.displayName);
+            console.log("  Email: " + profile.email);
+            console.log("  Photo URL: " + profile.photoURL);
+        });
+    }).catch(function(error) {
+        // Handle Errors here.
+        let errorCode = error.code;
+        let errorMessage = error.message;
+        // The email of the user's account used.
+        let email = error.email;
+        // The firebase.auth.AuthCredential type that was used.
+        let credential = error.credential;
+        // ...
+    });
+
+    function googleButton() {
+        let provider = new firebase.auth.GoogleAuthProvider();
+        firebase.auth().signInWithRedirect(provider);
+    }
+
+</script>
+</body>
+</html>
