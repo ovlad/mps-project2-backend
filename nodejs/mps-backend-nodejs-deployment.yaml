@@ -16,7 +16,7 @@ spec:
         io.kompose.service: mps-backend-nodejs
     spec:
       containers:
-        - image: gcr.io/mps-project2-backend/nodejs:v1
+        - image: gcr.io/mps-project2-backend/nodejs:latest
           imagePullPolicy: Always
           name: mps-backend-nodejs-live
           resources: {}

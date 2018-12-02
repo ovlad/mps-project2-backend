@@ -16,7 +16,7 @@ spec:
         io.kompose.service: mps-backend-nginx
     spec:
       containers:
-        - image: gcr.io/mps-project2-backend/nginx:v1
+        - image: gcr.io/mps-project2-backend/nginx:latest
           imagePullPolicy: Always
           name: mps-backend-nginx-live
           resources: {}

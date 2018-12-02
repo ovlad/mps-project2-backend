@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.live
-    image: gcr.io/mps-project2-backend/nginx:v1
+    image: gcr.io/mps-project2-backend/nginx:latest
     container_name: mps-backend-nginx-live
     hostname: nginx
     stdin_open: true
