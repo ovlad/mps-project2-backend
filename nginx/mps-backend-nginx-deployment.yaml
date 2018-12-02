@@ -17,6 +17,7 @@ spec:
     spec:
       containers:
         - image: gcr.io/mps-project2-backend/nginx:v1
+          imagePullPolicy: Always
           name: mps-backend-nginx-live
           resources: {}
           stdin: true

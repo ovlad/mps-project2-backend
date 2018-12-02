@@ -2,23 +2,23 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   annotations:
-    kompose.cmd: kompose --file ./nodejs/docker-compose.live.yml convert
+    kompose.cmd: kompose --file ./python/docker-compose.live.yml convert
     kompose.version: 1.16.0 (0c01309)
   labels:
-    io.kompose.service: mps-backend-nodejs
-  name: mps-backend-nodejs
+    io.kompose.service: mps-backend-python
+  name: mps-backend-python
 spec:
   replicas: 1
   strategy: {}
   template:
     metadata:
       labels:
-        io.kompose.service: mps-backend-nodejs
+        io.kompose.service: mps-backend-python
     spec:
       containers:
-        - image: gcr.io/mps-project2-backend/nodejs:v1
+        - image: gcr.io/mps-project2-backend/python:v1
           imagePullPolicy: Always
-          name: mps-backend-nodejs-live
+          name: mps-backend-python-live
           resources: {}
           stdin: true
           tty: true
