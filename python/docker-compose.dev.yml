@@ -13,7 +13,7 @@ services:
     volumes:
       - ./:/data/mps
     # runs server.py and prevent 'python server.py' process to have id 1 inside the container
-#    entrypoint: ["dumb-init", "python", "src/server.py"]
+    entrypoint: ["dumb-init", "python", "src/server.py"]
 
 networks:
   default:
