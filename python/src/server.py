@@ -2,7 +2,7 @@ from flask import Flask
 
 app = Flask(__name__)
 
-@app.route("/api")
+@app.route("/")
 def hello():
     return "Hello World! This is a greeting from the Python API!"
 
