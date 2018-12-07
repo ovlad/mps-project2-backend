@@ -16,6 +16,9 @@ spec:
         io.kompose.service: mps-backend-nodejs
     spec:
       containers:
+        - env:
+            - name: NODE_ENV
+              value: production
         - image: gcr.io/mps-project2-backend/nodejs:latest
           imagePullPolicy: Always
           name: mps-backend-nodejs-live

@@ -26,7 +26,7 @@ ENV PS1="\[\e[0;33m\]\u\[\e[0;36m\]@\[\e[0;36m\]\h \[\e[0;37m\]\w \[\e[0;33m\]$ 
 # and the person who runs the container
 EXPOSE 7000
 
-# changes user to atlas
+# changes user to mps
 USER mps
 
 # start the server

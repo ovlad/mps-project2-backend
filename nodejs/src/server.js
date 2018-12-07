@@ -8,6 +8,9 @@ const _ = require('lodash');
 // load env file
 require('dotenv').config();
 
+const Service = require('./service');
+
+const service = new Service();
 const app = express();
 const PORT = 7000;
 
@@ -90,9 +93,31 @@ app.post('/refresh', (req, res) => {
     });
 });
 
+// POST /register
+app.post('/register', verifyToken, (req, res) => {
+    const body = req.body || {};
+
+    service.register(body, (error, response) => {
+        if (error) {
+            res.json({error});
+        } else {
+            res.json(response)
+        }
+    });
+});
+
+
 // POST /bla
 app.post('/bla', verifyToken, (req, res) => {
-    res.send("Bla from the NodeJS API!");
+    const body = req.body || {};
+
+    service.bla(body, (error, response) => {
+        if (error) {
+            res.json({error});
+        } else {
+            res.json(response)
+        }
+    });
 });
 
 app.listen(PORT, () => console.log(`Example app listening on port ${PORT}!`));

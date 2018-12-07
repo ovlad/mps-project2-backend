@@ -10,3 +10,5 @@ services:
     hostname: live
     stdin_open: true
     tty: true
+    environment:
+      - NODE_ENV=production
