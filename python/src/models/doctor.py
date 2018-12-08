@@ -12,6 +12,6 @@ class Doctor(Base):
     mail = Column(String(30), nullable=False)
     password = Column(String(30), nullable=False)
     is_active = Column(TINYINT(1), nullable=False, default=0)
-    id_hospital = Column(Integer, ForeignKey("hospital.id_hospital"), nullable=False, ondelete="CASCADE")
+    id_hospital = Column(Integer, ForeignKey("hospital.id_hospital", ondelete="CASCADE"), nullable=False)
     hospital = relationship("Hospital", back_populates="doctors")
     requests = relationship("Request", back_populates="doctor")

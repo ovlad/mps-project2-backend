@@ -12,5 +12,5 @@ class Employee(Base):
     mail = Column(String(30), nullable=False)
     password = Column(String(30), nullable=False)
     is_active = Column(TINYINT(1), nullable=False, default=0)
-    id_center = Column(Integer, ForeignKey("transfusion_center.id_center"), nullable=False)
-    transfusion_center = relationship("TransfusionCenter", back_populates="employees", ondelete="CASCADE")
+    id_center = Column(Integer, ForeignKey("transfusion_center.id_center", ondelete="CASCADE"), nullable=False)
+    transfusion_center = relationship("TransfusionCenter", back_populates="employees")
