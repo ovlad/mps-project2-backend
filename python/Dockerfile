@@ -11,6 +11,15 @@ ADD ./dumb-init_1.2.1_amd64 /usr/local/bin/dumb-init
 RUN chmod +x /usr/local/bin/dumb-init
 
 # install python modules
+RUN set -e; \
+        apk add --no-cache --virtual .build-deps \
+                gcc \
+                libc-dev \
+                linux-headers \
+                mariadb-dev \
+                python3-dev \
+                postgresql-dev \
+        ;
 RUN pip install -r requirements.txt
 
 # create group 'mps and user 'mps' && change owner of the project
