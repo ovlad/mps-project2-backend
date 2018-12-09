@@ -8,8 +8,124 @@ const models = require('./../database/models');
 class Service {
     constructor() {}
 
+    login(body, callback) {
+        const email = body.email;
+        const password = body.password;
+
+        waterfall([
+            // check params
+            next => {
+                if (_.isUndefined(email)) {
+                    callback({ message: 'Missing `email` param.' });
+                }
+
+                if (_.isUndefined(password)) {
+                    callback({ message: 'Missing `password` param.' });
+                }
+
+                if (!_.isString(email) || !email.length) {
+                    callback({ message: 'Invalid `email` param.' });
+                }
+
+                if (!_.isString(password) || !password.length) {
+                    callback({ message: 'Invalid `password` param.' });
+                }
+
+                next();
+            },
+
+            // get user info from database
+            next => {
+                models.donor
+                    .findOne({
+                        where: {
+                            'mail': email,
+                            'password': password
+                        }
+                    })
+                    .then(record => {
+                        if (record) {
+                            callback(null, {
+                                id_donor: record.id_donor,
+                                name: record.name,
+                                surname: record.surname,
+                                email: record.mail,
+                                password: record.password
+                            });
+                        } else {
+                            next();
+                        }
+                    })
+                    .catch(error => {
+                        callback(error);
+                    });
+            },
+
+            // get user info from database
+            next => {
+                models.doctor
+                    .findOne({
+                        where: {
+                            'mail': email,
+                            'password': password
+                        }
+                    })
+                    .then(record => {
+                        if (record) {
+                            callback(null, {
+                                id_doctor: record.id_doctor,
+                                name: record.name,
+                                surname: record.surname,
+                                email: record.mail,
+                                password: record.password
+                            });
+                        } else {
+                            next();
+                        }
+                    })
+                    .catch(error => {
+                        callback(error);
+                    });
+            },
+
+
+            // get user info from database
+            next => {
+                models.employee
+                    .findOne({
+                        where: {
+                            'mail': email,
+                            'password': password
+                        }
+                    })
+                    .then(record => {
+                        if (record) {
+                            callback(null, {
+                                id_employee: record.id_employee,
+                                name: record.name,
+                                surname: record.surname,
+                                email: record.mail,
+                                password: record.password
+                            });
+                        } else {
+                            next();
+                        }
+                    })
+                    .catch(error => {
+                        callback(error);
+                    });
+            },
+
+            () => {
+                callback({ message: 'Invalid email or password. No user found' })
+            }
+        ]);
+    }
+
     register(body, callback) {
         const params = _.pick(body, ['name', 'surname', 'email', 'password', 'passwordConfirm', 'role', 'bloodType', 'rh', 'hospitalId', 'transfusionCenterId']);
+
+        console.log(params);
 
         waterfall([
             // validate params
@@ -28,7 +144,6 @@ class Service {
 
                 if (_.isUndefined(params.password)) {
                     callback({ message: 'Missing `password` param.' });
-
                 }
 
                 if (_.isUndefined(params.passwordConfirm)) {
@@ -88,7 +203,11 @@ class Service {
                         callback({ message: 'Missing `transfusionCenterId` param.' });
                     }
 
-                    if (!_.isInteger(params.transfusionCenterId)) {
+                    // if (!_.isInteger(params.transfusionCenterId)) {
+                    //     callback({ message: 'Invalid `transfusionCenterId` param.' });
+                    // }
+
+                    if (!_.isString(params.transfusionCenterId) || !params.transfusionCenterId.length) {
                         callback({ message: 'Invalid `transfusionCenterId` param.' });
                     }
                 } else if (params.role.toUpperCase() === 'DOCTOR') {
@@ -96,7 +215,11 @@ class Service {
                         callback({ message: 'Missing `hospitalId` param.' });
                     }
 
-                    if (!_.isInteger(params.hospitalId)) {
+                    // if (!_.isInteger(params.hospitalId)) {
+                    //     callback({ message: 'Invalid `hospitalId` param.' });
+                    // }
+
+                    if (!_.isString(params.hospitalId) || !params.hospitalId.length) {
                         callback({ message: 'Invalid `hospitalId` param.' });
                     }
                 }
@@ -182,7 +305,11 @@ class Service {
                     callback({ message: 'Invalid `email` param.' });
                 }
 
-                if (!_.isBoolean(isActive)) {
+                // if (!_.isBoolean(isActive)) {
+                //     callback({ message: 'Invalid `isActive` param.' });
+                // }
+
+                if (!_.isString(isActive) || !isActive.length || !['true', 'false'].includes(isActive.toLowerCase())) {
                     callback({ message: 'Invalid `isActive` param.' });
                 }
 
@@ -441,11 +568,19 @@ class Service {
                     callback({ message: 'Invalid `password` param.' });
                 }
 
-                if (!_.isUndefined(isActive) && !_.isBoolean(isActive)) {
+                // if (!_.isUndefined(isActive) && !_.isBoolean(isActive)) {
+                //     callback({ message: 'Invalid `isActive` param.' });
+                // }
+
+                if (!_.isString(isActive) || !isActive.length || !['true', 'false'].includes(isActive.toLowerCase())) {
                     callback({ message: 'Invalid `isActive` param.' });
                 }
 
-                if (!_.isUndefined(hospitalId) && !_.isInteger(hospitalId)) {
+                // if (!_.isUndefined(hospitalId) && !_.isInteger(hospitalId)) {
+                //     callback({ message: 'Invalid `hospitalId` param.' });
+                // }
+
+                if (!_.isString(hospitalId) || !hospitalId.length) {
                     callback({ message: 'Invalid `hospitalId` param.' });
                 }
 

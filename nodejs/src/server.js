@@ -42,26 +42,21 @@ function verifyToken(req, res, next) {
 
 // POST /login
 app.post('/login', (req, res) => {
-    const body = req.body || {};
+    const body = req.query || {};
 
-    // get params from body
-    const email = body.email;
-    const password = body.password;
-
-    // take username information from db
-    // ...
-    const user = {
-        email,
-        password
-    };
-
-    jwt.sign({user}, process.env.JWT_SECRET, (error, token) => {
+    service.login(body, (error, user) => {
         if (error) {
-            res.sendStatus(401);
-            console.log(error);
+            res.json({error});
         } else {
-            res.json({
-                token
+            jwt.sign({user}, process.env.JWT_SECRET, (error, token) => {
+                if (error) {
+                    res.sendStatus(401);
+                    console.log(error);
+                } else {
+                    res.json({
+                        token
+                    });
+                }
             });
         }
     });
@@ -69,7 +64,7 @@ app.post('/login', (req, res) => {
 
 // POST /refresh
 app.post('/refresh', (req, res) => {
-    const body = req.body || {};
+    const body = req.query || {};
 
     // get params from body
     const token = body.token;
@@ -94,8 +89,8 @@ app.post('/refresh', (req, res) => {
 });
 
 // POST /register
-app.post('/register', verifyToken, (req, res) => {
-    const body = req.body || {};
+app.post('/register', (req, res) => {
+    const body = req.query || {};
 
     service.register(body, (error, response) => {
         if (error) {
@@ -108,7 +103,7 @@ app.post('/register', verifyToken, (req, res) => {
 
 // PUT /updateStatus
 app.put('/updateStatus', verifyToken, (req, res) => {
-    const body = req.body || {};
+    const body = req.query || {};
 
     service.updateStatus(body, (error, response) => {
         if (error) {
@@ -121,7 +116,7 @@ app.put('/updateStatus', verifyToken, (req, res) => {
 
 // GET /donor
 app.get('/donor', verifyToken, (req, res) => {
-    const body = req.body || {};
+    const body = req.query || {};
 
     service.getDonors(body, (error, response) => {
         if (error) {
@@ -164,7 +159,7 @@ app.delete('/donor/:donorId', verifyToken, (req, res) => {
 
 // GET /doctor
 app.get('/doctor', verifyToken, (req, res) => {
-    const body = req.body || {};
+    const body = req.query || {};
 
     service.getDoctors(body, (error, response) => {
         if (error) {
