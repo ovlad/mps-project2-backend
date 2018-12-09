@@ -117,13 +117,12 @@ class Service {
                             'Rh': params.rh
                         })
                         .then(record => {
-                            console.log(record);
                             callback(null, { id_donor: record.id_donor });
 
                             return null;
                         })
                         .catch(error => {
-                            callback({ error });
+                            callback(error);
                         })
                 } else if (params.role === 'DOCTOR') {
                     models.doctor
@@ -140,7 +139,7 @@ class Service {
                             return null;
                         })
                         .catch(error => {
-                            callback({ error });
+                            callback(error);
                         })
                 } else if (params.role === 'EMPLOYEE') {
                     models.employee
@@ -157,15 +156,393 @@ class Service {
                             return null;
                         })
                         .catch(error => {
-                            callback({ error });
+                            callback(error);
                         })
                 }
             }
         ])
     }
 
-    bla(body, callback) {
-        callback(null, "Bla from the NodeJS API!");
+    updateStatus(body, callback) {
+        const email = body.email;
+        const isActive = body.isActive;
+
+        waterfall([
+            // check params
+            next => {
+                if (_.isUndefined(email)) {
+                    callback({ message: 'Missing `email` param.' });
+                }
+
+                if (_.isUndefined(isActive)) {
+                    callback({ message: 'Missing `isActive` param.' });
+                }
+
+                if (!_.isString(email) || !email.length) {
+                    callback({ message: 'Invalid `email` param.' });
+                }
+
+                if (!_.isBoolean(isActive)) {
+                    callback({ message: 'Invalid `isActive` param.' });
+                }
+
+                next();
+            },
+
+            // update the doctor status if the email belongs to a doctor
+            next => {
+                models.doctor
+                    .findOne({
+                        where: {
+                            'mail': email
+                        }
+                    })
+                    .then(record => {
+                        if (record) {
+                            models.doctor
+                                .update({
+                                    'is_active': isActive
+                                }, {
+                                    where: {
+                                        'mail': email
+                                    }
+                                })
+                                .then(response => {
+                                    if (response[0] === 1) {
+                                        callback(null, { updated: true });
+                                    } else {
+                                        callback({ message: 'No data was updated' });
+                                    }
+
+                                    return null;
+                                })
+                                .catch(error => {
+                                    callback(error);
+                                });
+                        } else {
+                            next();
+                        }
+
+                        return null;
+                    })
+                    .catch(error => {
+                        callback(error);
+                    });
+            },
+
+            // update the employee status if the email belongs to a doctor
+            next => {
+                models.employee
+                    .findOne({
+                        where: {
+                            'mail': email
+                        }
+                    })
+                    .then(record => {
+                        if (record) {
+                            models.employee
+                                .update({
+                                    'is_active': isActive
+                                },{
+                                    fields: ['is_active'],
+                                    where: {
+                                        'mail': email
+                                    }
+                                })
+                                .then(response => {
+                                    if (response[0] === 1) {
+                                        callback(null, { updated: true });
+                                    } else {
+                                        callback({ message: 'No data was updated' });
+                                    }
+
+                                    return null;
+                                })
+                                .catch(error => {
+                                    callback(error);
+                                });
+                        } else {
+                            next();
+                        }
+
+                        return null;
+                    })
+                    .catch(error => {
+                        callback(error);
+                    });
+            },
+
+            // callback with error
+            () => {
+                callback({ message: 'Invalid `email` param. The email does not belong to any doctor or employee' });
+            }
+        ]);
+    }
+
+    getDonors(body, callback) {
+        const name = body.name;
+        const surname = body.surname;
+        const email = body.email;
+        const password = body.password;
+        const bloodType = body.bloodType;
+        const rh = body.rh;
+
+        let where = {};
+
+        waterfall([
+            // check params
+            next => {
+                if (!_.isUndefined(name) && !(_.isString(name) && name.length)) {
+                    callback({ message: 'Invalid `name` param.' });
+                }
+
+                if (!_.isUndefined(surname) && !(_.isString(surname) && surname.length)) {
+                    callback({ message: 'Invalid `surname` param.' });
+                }
+
+                if (!_.isUndefined(email) && !(_.isString(email) && email.length)) {
+                    callback({ message: 'Invalid `email` param.' });
+                }
+
+                if (!_.isUndefined(password) && !(_.isString(password) && password.length)) {
+                    callback({ message: 'Invalid `password` param.' });
+                }
+
+                if (!_.isUndefined(bloodType) && !(_.isString(bloodType) && bloodType.length && ['0', 'A', 'B', 'AB'].includes(bloodType.toUpperCase()))) {
+                    callback({ message: 'Invalid `bloodType` param.' });
+                }
+
+                if (!_.isUndefined(rh) && !(_.isString(rh) && rh.length && ['positive', 'negative'].includes(rh.toLowerCase()))) {
+                    callback({ message: 'Invalid `rh` param.' });
+                }
+
+                next();
+            },
+
+            // build where object
+            next => {
+                if (!_.isUndefined(name)) {
+                    where.name = name;
+                }
+
+                if (!_.isUndefined(surname)) {
+                    where.surname = surname;
+                }
+
+                if (!_.isUndefined(email)) {
+                    where.mail = email;
+                }
+
+                if (!_.isUndefined(password)) {
+                    where.password = password;
+                }
+
+                if (!_.isUndefined(bloodType)) {
+                    where.blood_type = bloodType
+                }
+
+                if (!_.isUndefined(rh)) {
+                    where.Rh = rh;
+                }
+
+                next();
+            },
+
+            // get donors
+            () => {
+                models.donor
+                    .findAll({
+                        where: where
+                    })
+                    .then(records => {
+                        callback(null, records);
+
+                        return null;
+                    })
+                    .catch(error => {
+                        callback(error);
+                    });
+            }
+        ])
+    }
+
+    getDonor(body, callback) {
+        const donorId = body.donorId;
+
+        models.donor
+            .findOne({
+                where: {
+                    'id_donor': donorId
+                }
+            })
+            .then(record => {
+                if (record) {
+                    callback(null, record);
+                } else {
+                    callback({ message: 'Invalid donor id ' + donorId });
+                }
+
+                return null;
+            })
+            .catch(error => {
+                callback(error);
+            });
+    }
+
+    deleteDonor(body, callback) {
+        const donorId = body.donorId;
+
+        models.donor
+            .destroy({
+                where: {
+                    'id_donor': donorId
+                }
+            })
+            .then(response => {
+                if (response) {
+                    callback(null, { deleted: true });
+                } else {
+                    callback({ message: 'No data was deleted' });
+                }
+
+                return null;
+            })
+            .catch(error => {
+                callback(error);
+            });
+    }
+
+    getDoctors(body, callback) {
+        const name = body.name;
+        const surname = body.surname;
+        const email = body.email;
+        const password = body.password;
+        const isActive = body.isActive;
+        const hospitalId = body.hospitalId;
+
+        let where = {};
+
+        waterfall([
+            // check params
+            next => {
+                if (!_.isUndefined(name) && !(_.isString(name) && name.length)) {
+                    callback({ message: 'Invalid `name` param.' });
+                }
+
+                if (!_.isUndefined(surname) && !(_.isString(surname) && surname.length)) {
+                    callback({ message: 'Invalid `surname` param.' });
+                }
+
+                if (!_.isUndefined(email) && !(_.isString(email) && email.length)) {
+                    callback({ message: 'Invalid `email` param.' });
+                }
+
+                if (!_.isUndefined(password) && !(_.isString(password) && password.length)) {
+                    callback({ message: 'Invalid `password` param.' });
+                }
+
+                if (!_.isUndefined(isActive) && !_.isBoolean(isActive)) {
+                    callback({ message: 'Invalid `isActive` param.' });
+                }
+
+                if (!_.isUndefined(hospitalId) && !_.isInteger(hospitalId)) {
+                    callback({ message: 'Invalid `hospitalId` param.' });
+                }
+
+                next();
+            },
+
+            // build where object
+            next => {
+                if (!_.isUndefined(name)) {
+                    where.name = name;
+                }
+
+                if (!_.isUndefined(surname)) {
+                    where.surname = surname;
+                }
+
+                if (!_.isUndefined(email)) {
+                    where.mail = email;
+                }
+
+                if (!_.isUndefined(password)) {
+                    where.password = password;
+                }
+
+                if (!_.isUndefined(isActive)) {
+                    where.is_active = isActive
+                }
+
+                if (!_.isUndefined(hospitalId)) {
+                    where.id_hospital = hospitalId;
+                }
+
+                next();
+            },
+
+            // get donors
+            () => {
+                models.doctor
+                    .findAll({
+                        where: where
+                    })
+                    .then(records => {
+                        callback(null, records);
+
+                        return null;
+                    })
+                    .catch(error => {
+                        callback(error);
+                    });
+            }
+        ])
+    }
+
+    getDoctor(body, callback) {
+        const doctorId = body.doctorId;
+
+        models.doctor
+            .findOne({
+                where: {
+                    'id_doctor': doctorId
+                }
+            })
+            .then(record => {
+                if (record) {
+                    callback(null, record);
+                } else {
+                    callback({message: 'Invalid doctor id ' + doctorId});
+                }
+
+                return null;
+            })
+            .catch(error => {
+                callback(error);
+            });
+    }
+
+    deleteDoctor(body, callback) {
+        const doctorId = body.doctorId;
+
+        models.doctor
+            .destroy({
+                where: {
+                    'id_doctor': doctorId
+                }
+            })
+            .then(response => {
+                if (response) {
+                    callback(null, { deleted: true });
+                } else {
+                    callback({ message: 'No data was deleted' });
+                }
+
+                return null;
+            })
+            .catch(error => {
+                callback(error);
+            });
     }
 }
 
