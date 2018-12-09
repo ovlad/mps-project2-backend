@@ -79,7 +79,8 @@ class Service {
                                 name: record.name,
                                 surname: record.surname,
                                 email: record.mail,
-                                password: record.password
+                                password: record.password,
+                                isActive: record.is_active
                             });
                         } else {
                             next();
@@ -107,7 +108,8 @@ class Service {
                                 name: record.name,
                                 surname: record.surname,
                                 email: record.mail,
-                                password: record.password
+                                password: record.password,
+                                isActive: record.is_active
                             });
                         } else {
                             next();
