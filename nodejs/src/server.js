@@ -106,12 +106,98 @@ app.post('/register', verifyToken, (req, res) => {
     });
 });
 
-
-// POST /bla
-app.post('/bla', verifyToken, (req, res) => {
+// PUT /updateStatus
+app.put('/updateStatus', verifyToken, (req, res) => {
     const body = req.body || {};
 
-    service.bla(body, (error, response) => {
+    service.updateStatus(body, (error, response) => {
+        if (error) {
+            res.json({error});
+        } else {
+            res.json(response)
+        }
+    });
+});
+
+// GET /donor
+app.get('/donor', verifyToken, (req, res) => {
+    const body = req.body || {};
+
+    service.getDonors(body, (error, response) => {
+        if (error) {
+            res.json({error});
+        } else {
+            res.json(response)
+        }
+    });
+});
+
+// GET /donor/{donorId}
+app.get('/donor/:donorId', verifyToken, (req, res) => {
+    const body = {
+        donorId: req.params.donorId
+    };
+
+    service.getDonor(body, (error, response) => {
+        if (error) {
+            res.json({error});
+        } else {
+            res.json(response)
+        }
+    });
+});
+
+// DELETE /donor/{donorId}
+app.delete('/donor/:donorId', verifyToken, (req, res) => {
+    const body = {
+        donorId: req.params.donorId
+    };
+
+    service.deleteDonor(body, (error, response) => {
+        if (error) {
+            res.json({error});
+        } else {
+            res.json(response)
+        }
+    });
+});
+
+// GET /doctor
+app.get('/doctor', verifyToken, (req, res) => {
+    const body = req.body || {};
+
+    service.getDoctors(body, (error, response) => {
+        if (error) {
+            res.json({error});
+        } else {
+            res.json(response)
+        }
+    });
+});
+
+
+// GET /doctor/{doctorId}
+app.get('/doctor/:doctorId', verifyToken, (req, res) => {
+    const body = {
+        doctorId: req.params.doctorId
+    };
+
+    service.getDoctor(body, (error, response) => {
+        if (error) {
+            res.json({error});
+        } else {
+            res.json(response)
+        }
+    });
+});
+
+// DELETE /doctor/{doctorId}
+app.delete('/doctor/:doctorId', verifyToken, (req, res) => {
+    const body = {
+        doctorId: req.params.doctorId
+    };
+
+    service.deleteDoctor(body, (error, response) => {
         if (error) {
             res.json({error});
         } else {
