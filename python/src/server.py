@@ -1,7 +1,9 @@
+import socket, importlib
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
-from config import dev as config
+
+config = importlib.import_module("."+socket.gethostname(), package="config")
 
 db_host = config.DATABASE_CONFIG['host']
 db_name = config.DATABASE_CONFIG['dbname']
