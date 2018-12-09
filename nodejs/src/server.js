@@ -46,7 +46,7 @@ app.post('/login', (req, res) => {
 
     service.login(body, (error, user) => {
         if (error) {
-            res.json({error});
+            res.status(401).send({error});
         } else {
             jwt.sign({user}, process.env.JWT_SECRET, (error, token) => {
                 if (error) {
@@ -94,7 +94,7 @@ app.post('/register', (req, res) => {
 
     service.register(body, (error, response) => {
         if (error) {
-            res.json({error});
+            res.status(500).send({error});
         } else {
             res.json(response)
         }
@@ -107,7 +107,7 @@ app.put('/updateStatus', verifyToken, (req, res) => {
 
     service.updateStatus(body, (error, response) => {
         if (error) {
-            res.json({error});
+            res.status(500).send({error});
         } else {
             res.json(response)
         }
@@ -120,7 +120,7 @@ app.get('/donor', verifyToken, (req, res) => {
 
     service.getDonors(body, (error, response) => {
         if (error) {
-            res.json({error});
+            res.status(500).send({error});
         } else {
             res.json(response)
         }
@@ -135,7 +135,7 @@ app.get('/donor/:donorId', verifyToken, (req, res) => {
 
     service.getDonor(body, (error, response) => {
         if (error) {
-            res.json({error});
+            res.status(500).send({error});
         } else {
             res.json(response)
         }
@@ -150,7 +150,7 @@ app.delete('/donor/:donorId', verifyToken, (req, res) => {
 
     service.deleteDonor(body, (error, response) => {
         if (error) {
-            res.json({error});
+            res.status(500).send({error});
         } else {
             res.json(response)
         }
@@ -163,7 +163,7 @@ app.get('/doctor', verifyToken, (req, res) => {
 
     service.getDoctors(body, (error, response) => {
         if (error) {
-            res.json({error});
+            res.status(500).send({error});
         } else {
             res.json(response)
         }
@@ -179,7 +179,7 @@ app.get('/doctor/:doctorId', verifyToken, (req, res) => {
 
     service.getDoctor(body, (error, response) => {
         if (error) {
-            res.json({error});
+            res.status(500).send({error});
         } else {
             res.json(response)
         }
@@ -194,7 +194,7 @@ app.delete('/doctor/:doctorId', verifyToken, (req, res) => {
 
     service.deleteDoctor(body, (error, response) => {
         if (error) {
-            res.json({error});
+            res.status(500).send({error});
         } else {
             res.json(response)
         }
