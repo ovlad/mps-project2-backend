@@ -46,7 +46,8 @@ class Service {
                     .then(record => {
                         if (record) {
                             callback(null, {
-                                id_donor: record.id_donor,
+                                id: record.id_donor,
+                                role: 'DONOR',
                                 name: record.name,
                                 surname: record.surname,
                                 email: record.mail,
@@ -73,7 +74,8 @@ class Service {
                     .then(record => {
                         if (record) {
                             callback(null, {
-                                id_doctor: record.id_doctor,
+                                id: record.id_doctor,
+                                role: 'DOCTOR',
                                 name: record.name,
                                 surname: record.surname,
                                 email: record.mail,
@@ -88,7 +90,6 @@ class Service {
                     });
             },
 
-
             // get user info from database
             next => {
                 models.employee
@@ -101,7 +102,36 @@ class Service {
                     .then(record => {
                         if (record) {
                             callback(null, {
-                                id_employee: record.id_employee,
+                                id: record.id_employee,
+                                role: 'EMPLOYEE',
+                                name: record.name,
+                                surname: record.surname,
+                                email: record.mail,
+                                password: record.password
+                            });
+                        } else {
+                            next();
+                        }
+                    })
+                    .catch(error => {
+                        callback(error);
+                    });
+            },
+
+            // get user info from database
+            next => {
+                models.admin
+                    .findOne({
+                        where: {
+                            'mail': email,
+                            'password': password
+                        }
+                    })
+                    .then(record => {
+                        if (record) {
+                            callback(null, {
+                                id: record.id_admin,
+                                role: 'ADMIN',
                                 name: record.name,
                                 surname: record.surname,
                                 email: record.mail,
