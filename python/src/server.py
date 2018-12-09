@@ -15,6 +15,7 @@ db_connect_string = "mysql://" + db_user + ":" + db_password + "@" + db_host + "
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = db_connect_string
+app.config['SQLALCHEMY_POOL_RECYCLE'] = 100
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
 
