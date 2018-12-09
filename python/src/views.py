@@ -3,6 +3,7 @@ from flask import request, jsonify
 from models import Doctor, Donation, Donor, Employee, Hospital, Request, TransfusionCenter
 from schemas import DoctorSchema, DonationSchema, DonorSchema, EmployeeSchema, HospitalSchema, RequestSchema, TransfusionCenterSchema
 
+
 @app.route("/")
 def hello():
     tables = ""
@@ -11,10 +12,6 @@ def hello():
         tables += str(entry.items()[0][1]) + " "
     return tables
 
-@app.route("/employee", methods=['GET'])
-def employee_api():
-    if request.method == "GET":
-        return " ".join(Employee.query.all())
 
 @app.route("/donor", methods=['GET'])
 def donor_api():

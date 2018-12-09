@@ -26,6 +26,8 @@ class HospitalSchema(ma.ModelSchema):
 
 		
 class RequestSchema(ma.ModelSchema):
+    status = EnumField(RequestStatusEnum)
+    Rh = EnumField(DonorRhEnum)
     class Meta:
         model = Request
 
