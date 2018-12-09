@@ -46,5 +46,32 @@ def hospital_api():
         db.session.commit()
         return jsonify(hospital.id_hospital)
 
+@app.route("/hospital/<int:hospitalId>", methods=['GET', 'DELETE', 'PUT'])
+def get_hospital_by_id(hospitalId):
+    if request.method == "GET":
+        hospital = Hospital.query.get(hospitalId)
+        hospital_schema = HospitalSchema()
+        return jsonify(hospital_schema.dump(hospital).data)
+    if request.method == "DELETE":
+        hospital = Hospital.query.get(hospitalId)
+        db.session.delete(hospital)
+        db.session.commit()
+        return jsonify({})
+    if request.method == "PUT":
+        hospital = Hospital(request.args.get('name'))
+        db.session.update(hospital)
+        db.session.commit()
+        return jsonify(hospital.id_hospital)
 
 
+@app.route("/transfusionCenter", methods=['GET', 'POST'])
+def transfusion_api():
+    if request.method == "GET":
+        transfusion_c = TransfusionCenter.query.all()
+        transfusion_c_schema = TransfusionCenterSchema(many=True)
+        return jsonify(transfusion_c_schema.dump(transfusion_c).data)
+    if request.method == "POST":
+        transfusion = TransfusionCenter(request.args.get('name'))
+        db.session.add(transfusion)
+        db.session.commit()
+        return jsonify(transfusion.id_center)
