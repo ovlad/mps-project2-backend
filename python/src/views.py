@@ -6,11 +6,11 @@ from schemas import DonationSchema, EmployeeSchema, HospitalSchema, RequestSchem
 
 @app.route("/employee", methods=['GET'], defaults={'employeeId': None})
 @app.route("/employee/<int:employeeId>", methods=['GET', 'DELETE'])
-@jwt_required
+#@jwt_required
 def employee_api(employeeId):
-    current_user = get_jwt_identity()
-    if not current_user:
-        return jsonify({}), 401
+    #current_user = get_jwt_identity()
+    #if not current_user:
+        #return jsonify({}), 401
     employee_schema = EmployeeSchema()
     employee_schema_many = EmployeeSchema(many=True)
 
@@ -47,20 +47,21 @@ def hospital_api_unprotected(hospitalId):
 
 @app.route("/hospital", methods=['POST'], defaults={'hospitalId': None})
 @app.route("/hospital/<int:hospitalId>", methods=['PUT', 'DELETE'])
-@jwt_required
+#@jwt_required
 def hospital_api(hospitalId):
+    hospital_schema = HospitalSchema()
     if request.method == "POST":
         hospital = Hospital(request.args.get('name'))
         db.session.add(hospital)
         db.session.commit()
-        return jsonify(hospital)
+        return jsonify(hospital_schema.dump(hospital).data)
 
     if request.method == "PUT":
         if hospitalId:
             hospital = Hospital.query.get(hospitalId)
             hospital.name = request.args.get('name')
             db.session.commit()
-            return jsonify(hospital)
+            return jsonify(hospital_schema.dump(hospital).data)
 
     if request.method == "DELETE":
         if hospitalId:
@@ -87,20 +88,21 @@ def transfusion_center_api_unprotected(transfusionCenterId):
 
 @app.route("/transfusionCenter", methods=['POST'], defaults={'transfusionCenterId': None})
 @app.route("/transfusionCenter/<int:transfusionCenterId>", methods=['PUT', 'DELETE'])
-@jwt_required
+#@jwt_required
 def transfusion_center_api(transfusionCenterId):
+    transfusion_center_schema = TransfusionCenterSchema()
     if request.method == "POST":
         transfusion_center = TransfusionCenter(request.args.get('name'))
         db.session.add(transfusion_center)
         db.session.commit()
-        return jsonify(transfusion_center)
+        return jsonify(transfusion_center_schema.dump(transfusion_center).data)
 
     if request.method == "PUT":
         if transfusionCenterId:
             transfusion_center = TransfusionCenter.query.get(transfusionCenterId)
             transfusion_center.name = request.args.get('name')
             db.session.commit()
-            return jsonify(transfusion_center)
+            return jsonify(transfusion_center_schema.dump(transfusion_center).data)
 
     if request.method == "DELETE":
         if transfusionCenterId:
@@ -112,7 +114,7 @@ def transfusion_center_api(transfusionCenterId):
 
 @app.route("/bloodRequest", methods=['GET', 'POST'], defaults={'requestId': None})
 @app.route("/bloodRequest/<int:requestId>", methods=['GET', 'PUT', 'DELETE'])
-@jwt_required
+#@jwt_required
 def request_api(requestId):
     request_schema = RequestSchema()
     request_schema_many = RequestSchema(many=True)
@@ -143,7 +145,7 @@ def request_api(requestId):
         new_request = Request(blood_type, rh, receiving_person, quantity, doctor_id, transfusion_center_id)
         db.session.add(new_request)
         db.session.commit()
-        return jsonify(new_request)
+        return jsonify(request_schema.dump(new_request).data)
 
     if request.method == "PUT":
         if requestId:
@@ -156,7 +158,7 @@ def request_api(requestId):
             request_one.doctor_id = request.args.get('doctorId')
             request_one.transfusion_center_id = request.args.get('transfusionCenterId')
             db.session.commit()
-            return jsonify(request_one)
+            return jsonify(request_schema.dump(request_one).data)
 
     if request.method == "DELETE":
         request_x = Request.query.get(requestId)
@@ -167,7 +169,7 @@ def request_api(requestId):
 
 @app.route("/donation", methods=['GET', 'POST'], defaults={'donationId': None})
 @app.route("/donation/<int:donationId>", methods=['GET', 'PUT', 'DELETE'])
-@jwt_required
+#@jwt_required
 def donation_api(donationId):
     donation_schema = DonationSchema()
     donation_schema_many = DonationSchema(many=True)
@@ -197,7 +199,7 @@ def donation_api(donationId):
         new_donation = Donation(blood_test, date, quantity, donor_id, request_id)
         db.session.add(new_donation)
         db.session.commit()
-        return jsonify(new_donation)
+        return jsonify(donation_schema.dump(new_donation).data)
 
     if request.method == "PUT":
         if donationId:
@@ -207,7 +209,7 @@ def donation_api(donationId):
             donation_one.donor_id = request.args.get('donor_id')
             donation_one.request_id = request.args.get('request_id')
             db.session.commit()
-            return jsonify(donation_one)
+            return jsonify(donation_schema.dump(donation_one).data)
 
     if request.method == "DELETE":
         donation = Request.query.get(donationId)
