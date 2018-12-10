@@ -8,5 +8,5 @@ DATABASE_CONFIG = {
 }
 
 JWT_CONFIG = {
-	'JWT_SECRET_KEY': 'secret123'
+	'JWT_SECRET_KEY': 'ceva-super-secret'
 }

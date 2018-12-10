@@ -1,4 +1,4 @@
-from server import app, db, jwt_required, get_jwt_identity
+from server import app, db, jwt_required
 from flask import request, jsonify
 from models import Donation, Employee, Hospital, Request, TransfusionCenter
 from schemas import DonationSchema, EmployeeSchema, HospitalSchema, RequestSchema, TransfusionCenterSchema
@@ -6,11 +6,8 @@ from schemas import DonationSchema, EmployeeSchema, HospitalSchema, RequestSchem
 
 @app.route("/employee", methods=['GET'], defaults={'employeeId': None})
 @app.route("/employee/<int:employeeId>", methods=['GET', 'DELETE'])
-#@jwt_required
+@jwt_required
 def employee_api(employeeId):
-    #current_user = get_jwt_identity()
-    #if not current_user:
-        #return jsonify({}), 401
     employee_schema = EmployeeSchema()
     employee_schema_many = EmployeeSchema(many=True)
 
@@ -47,7 +44,7 @@ def hospital_api_unprotected(hospitalId):
 
 @app.route("/hospital", methods=['POST'], defaults={'hospitalId': None})
 @app.route("/hospital/<int:hospitalId>", methods=['PUT', 'DELETE'])
-#@jwt_required
+@jwt_required
 def hospital_api(hospitalId):
     hospital_schema = HospitalSchema()
     if request.method == "POST":
@@ -88,7 +85,7 @@ def transfusion_center_api_unprotected(transfusionCenterId):
 
 @app.route("/transfusionCenter", methods=['POST'], defaults={'transfusionCenterId': None})
 @app.route("/transfusionCenter/<int:transfusionCenterId>", methods=['PUT', 'DELETE'])
-#@jwt_required
+@jwt_required
 def transfusion_center_api(transfusionCenterId):
     transfusion_center_schema = TransfusionCenterSchema()
     if request.method == "POST":
@@ -114,7 +111,7 @@ def transfusion_center_api(transfusionCenterId):
 
 @app.route("/bloodRequest", methods=['GET', 'POST'], defaults={'requestId': None})
 @app.route("/bloodRequest/<int:requestId>", methods=['GET', 'PUT', 'DELETE'])
-#@jwt_required
+@jwt_required
 def request_api(requestId):
     request_schema = RequestSchema()
     request_schema_many = RequestSchema(many=True)
@@ -169,7 +166,7 @@ def request_api(requestId):
 
 @app.route("/donation", methods=['GET', 'POST'], defaults={'donationId': None})
 @app.route("/donation/<int:donationId>", methods=['GET', 'PUT', 'DELETE'])
-#@jwt_required
+@jwt_required
 def donation_api(donationId):
     donation_schema = DonationSchema()
     donation_schema_many = DonationSchema(many=True)
