@@ -136,7 +136,7 @@ def request_api(requestId):
     if request.method == "POST":
         receiving_person = request.args.get('receivingPerson')
         quantity = request.args.get('quantity')
-        blood_type = request.args.get('bloogType')
+        blood_type = request.args.get('bloodType')
         rh = request.args.get('rh')
         doctor_id = request.args.get('doctorId')
         transfusion_center_id = request.args.get('transfusionCenterId')
@@ -151,7 +151,7 @@ def request_api(requestId):
             request_one.status = request.args.get('status')
             request_one.receiving_person = request.args.get('receivingPerson')
             request_one.quantity = request.args.get('quantity')
-            request_one.blood_type = request.args.get('bloogType')
+            request_one.blood_type = request.args.get('bloodType')
             request_one.rh = request.args.get('rh')
             request_one.doctor_id = request.args.get('doctorId')
             request_one.transfusion_center_id = request.args.get('transfusionCenterId')
