@@ -81,8 +81,8 @@ class TransfusionCenter(db.Model):
     __tablename__ = "transfusion_center"
     idCenter = db.Column("id_center", db.Integer, primary_key=True, nullable=False, autoincrement=True)
     name = db.Column(db.String(50), nullable=False)
-    employees = db.relationship("Employee", back_populates="transfusion_center")
-    requests = db.relationship("Request", back_populates="transfusion_center")
+    employees = db.relationship("Employee", back_populates="transfusionCenter")
+    requests = db.relationship("Request", back_populates="transfusionCenter")
 
     def __init__(self, name):
         self.name = name

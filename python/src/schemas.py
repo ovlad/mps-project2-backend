@@ -10,7 +10,7 @@ class DonationSchema(ma.ModelSchema):
 
 		
 class DonorSchema(ma.ModelSchema):
-    Rh = EnumField(DonorRhEnum)
+    rh = EnumField(DonorRhEnum)
     class Meta:
         model = Donor
 
@@ -27,7 +27,7 @@ class HospitalSchema(ma.ModelSchema):
 		
 class RequestSchema(ma.ModelSchema):
     status = EnumField(RequestStatusEnum)
-    Rh = EnumField(DonorRhEnum)
+    rh = EnumField(DonorRhEnum)
     class Meta:
         model = Request
 
