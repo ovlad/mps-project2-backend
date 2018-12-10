@@ -201,4 +201,20 @@ app.delete('/doctor/:doctorId', verifyToken, (req, res) => {
     });
 });
 
+app.get('*', verifyToken, (req, res) => {
+    res.sendStatus(403);
+});
+
+app.post('*', verifyToken, (req, res) => {
+    res.sendStatus(403);
+});
+
+app.put('*', verifyToken, (req, res) => {
+    res.sendStatus(403);
+});
+
+app.delete('*', verifyToken, (req, res) => {
+    res.sendStatus(403);
+});
+
 app.listen(PORT, () => console.log(`Example app listening on port ${PORT}!`));
