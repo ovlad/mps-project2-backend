@@ -604,7 +604,7 @@ class Service {
                 //     callback({ message: 'Invalid `isActive` param.' });
                 // }
 
-                if (!_.isString(isActive) || !isActive.length || !['true', 'false'].includes(isActive.toLowerCase())) {
+                if (!_.isUndefined(isActive) && !(_.isString(isActive) && isActive.length && ['true', 'false'].includes(isActive.toLowerCase()))) {
                     callback({ message: 'Invalid `isActive` param.' });
                 }
 
@@ -612,7 +612,7 @@ class Service {
                 //     callback({ message: 'Invalid `hospitalId` param.' });
                 // }
 
-                if (!_.isString(hospitalId) || !hospitalId.length) {
+                if (!_.isUndefined(hospitalId) && !(_.isString(hospitalId) && !hospitalId.length)) {
                     callback({ message: 'Invalid `hospitalId` param.' });
                 }
 
