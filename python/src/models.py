@@ -9,7 +9,7 @@ class Employee(db.Model):
     surname = db.Column(db.String(30), nullable=False)
     email = db.Column("mail", db.String(30), nullable=False)
     password = db.Column(db.String(30), nullable=False)
-    is_active = db.Column(db.Boolean, nullable=False, default=False)
+    isActive = db.Column("is_active", db.Boolean, nullable=False, default=False)
     id_center = db.Column(db.Integer, db.ForeignKey("transfusion_center.id_center", ondelete="CASCADE"), nullable=False)
     transfusion_center = db.relationship("TransfusionCenter", back_populates="employees")
 
@@ -18,7 +18,7 @@ class Employee(db.Model):
         self.surname = surname
         self.mail = mail
         self.password = password
-        self.is_active = False
+        self.isActive = False
         self.id_center = id_center
 
 
@@ -95,7 +95,7 @@ class Doctor(db.Model):
     surname = db.Column(db.String(30), nullable=False)
     email = db.Column("mail", db.String(30), nullable=False)
     password = db.Column(db.String(30), nullable=False)
-    is_active = db.Column(db.Boolean, nullable=False, default=False)
+    isActive = db.Column("is_active", db.Boolean, nullable=False, default=False)
     id_hospital = db.Column(db.Integer, db.ForeignKey("hospital.id_hospital", ondelete="CASCADE"), nullable=False)
     hospital = db.relationship("Hospital", back_populates="doctors")
     requests = db.relationship("Request", back_populates="doctor")
@@ -105,7 +105,7 @@ class Doctor(db.Model):
         self.surname = surname
         self.email = email
         self.password = password
-        self.is_active = False
+        self.isActive = False
         self.id_hospital = id_hospital
 
 class Donation(db.Model):
