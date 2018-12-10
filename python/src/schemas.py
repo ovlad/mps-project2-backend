@@ -4,16 +4,18 @@ from enums import RequestStatusEnum, DonorRhEnum
 from models import Doctor, Donation, Donor, Employee, Hospital, Request, TransfusionCenter
 
 
-class DonationSchema(ma.ModelSchema):
-    class Meta:
-        model = Donation
-
-
 class DonorSchema(ma.ModelSchema):
     rh = EnumField(DonorRhEnum)
 
     class Meta:
         model = Donor
+
+
+class DonationSchema(ma.ModelSchema):
+    donor = ma.Nested(DonorSchema)
+
+    class Meta:
+        model = Donation
 
 
 class EmployeeSchema(ma.ModelSchema):
@@ -26,14 +28,6 @@ class HospitalSchema(ma.ModelSchema):
         model = Hospital
 
 
-class RequestSchema(ma.ModelSchema):
-    status = EnumField(RequestStatusEnum)
-    rh = EnumField(DonorRhEnum)
-
-    class Meta:
-        model = Request
-
-
 class TransfusionCenterSchema(ma.ModelSchema):
     class Meta:
         model = TransfusionCenter
@@ -42,3 +36,14 @@ class TransfusionCenterSchema(ma.ModelSchema):
 class DoctorSchema(ma.ModelSchema):
     class Meta:
         model = Doctor
+
+
+class RequestSchema(ma.ModelSchema):
+    status = EnumField(RequestStatusEnum)
+    rh = EnumField(DonorRhEnum)
+    donations = ma.Nested(DonationSchema, many=True)
+    doctor = ma.Nested(DoctorSchema)
+    transfusionCenter = ma.Nested(TransfusionCenterSchema)
+
+    class Meta:
+        model = Request
