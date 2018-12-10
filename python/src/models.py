@@ -4,22 +4,22 @@ from enums import RequestStatusEnum, DonorRhEnum
 
 class Employee(db.Model):
     __tablename__ = "employee"
-    id_employee = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
+    idEmployee = db.Column("id_employee", db.Integer, primary_key=True, nullable=False, autoincrement=True)
     name = db.Column(db.String(30), nullable=False)
     surname = db.Column(db.String(30), nullable=False)
     email = db.Column("mail", db.String(30), nullable=False)
     password = db.Column(db.String(30), nullable=False)
     isActive = db.Column("is_active", db.Boolean, nullable=False, default=False)
-    id_center = db.Column(db.Integer, db.ForeignKey("transfusion_center.id_center", ondelete="CASCADE"), nullable=False)
-    transfusion_center = db.relationship("TransfusionCenter", back_populates="employees")
+    idCenter = db.Column("id_center", db.Integer, db.ForeignKey("transfusion_center.id_center", ondelete="CASCADE"), nullable=False)
+    transfusionCenter = db.relationship("TransfusionCenter", back_populates="employees")
 
-    def __init__(self, name, surname, mail, password, id_center):
+    def __init__(self, name, surname, mail, password, idCenter):
         self.name = name
         self.surname = surname
         self.mail = mail
         self.password = password
         self.isActive = False
-        self.id_center = id_center
+        self.idCenter = idCenter
 
 
 class Donor(db.Model):
@@ -29,22 +29,22 @@ class Donor(db.Model):
     surname = db.Column(db.String(30), nullable=False)
     email = db.Column("mail", db.String(30), nullable=False)
     password = db.Column(db.String(30), nullable=False)
-    blood_type = db.Column(db.String(5), nullable=False)
-    Rh = db.Column(db.Enum(DonorRhEnum), nullable=False)
+    bloodType = db.Column("blood_type", db.String(5), nullable=False)
+    rh = db.Column("Rh", db.Enum(DonorRhEnum), nullable=False)
     donations = db.relationship("Donation", back_populates="donor")
 
-    def __init__(self, name, surname, e, password, blood_type, Rh):
+    def __init__(self, name, surname, email, password, bloodType, rh):
         self.name = name
         self.surname = surname
         self.email = email
         self.password = password
-        self.blood_type = blood_type
-        self.Rh = Rh
+        self.bloodType = bloodType
+        self.rh = rh
 
 
 class Hospital(db.Model):
     __tablename__ = "hospital"
-    id_hospital = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
+    idHospital = db.Column("id_hospital", db.Integer, primary_key=True, nullable=False, autoincrement=True)
     name = db.Column(db.String(50), nullable=False)
     doctors = db.relationship("Doctor", back_populates="hospital")
 
@@ -54,35 +54,35 @@ class Hospital(db.Model):
 
 class Request(db.Model):
     __tablename__ = "request"
-    id_request = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
+    idRequest = db.Column("id_request", db.Integer, primary_key=True, nullable=False, autoincrement=True)
     status = db.Column(db.Enum(RequestStatusEnum))
-    blood_type = db.Column(db.String(5), nullable=False)
-    Rh = db.Column(db.Enum(DonorRhEnum), nullable=False)
-    receiving_person = db.Column(db.String(60))
+    bloodType = db.Column("blood_type", db.String(5), nullable=False)
+    rh = db.Column("Rh", db.Enum(DonorRhEnum), nullable=False)
+    receivingPerson = db.Column("receiving_person", db.String(60))
     quantity = db.Column(db.Float)
-    id_doctor = db.Column(db.Integer, db.ForeignKey("doctor.id_doctor", ondelete="CASCADE"))
-    id_center = db.Column(db.Integer, db.ForeignKey("transfusion_center.id_center", ondelete="CASCADE"))
-    transfusion_center = db.relationship("TransfusionCenter", back_populates="requests")
+    idDoctor = db.Column("id_doctor", db.Integer, db.ForeignKey("doctor.id_doctor", ondelete="CASCADE"))
+    idCenter = db.Column("id_center", db.Integer, db.ForeignKey("transfusion_center.id_center", ondelete="CASCADE"))
+    transfusionCenter = db.relationship("TransfusionCenter", back_populates="requests")
     donations = db.relationship("Donation", back_populates="request")
     doctor = db.relationship("Doctor", back_populates="requests")
 
-    def __init__(self, blood_type, Rh, receiving_person, quantity, id_doctor, id_center):
+    def __init__(self, bloodType, rh, receivingPerson, quantity, idDoctor, idCenter):
         self.status = RequestStatusEnum.Donation
-        self.blood_type = blood_type
-        self.Rh = Rh
-        self.receiving_person = receiving_person
+        self.bloodType = bloodType
+        self.rh = rh
+        self.receivingPerson = receivingPerson
         self.quantity = quantity
-        self.id_doctor = id_doctor
-        self.id_center = id_center
+        self.idDoctor = idDoctor
+        self.idCenter = idCenter
 
 
 
 class TransfusionCenter(db.Model):
     __tablename__ = "transfusion_center"
-    id_center = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
+    idCenter = db.Column("id_center", db.Integer, primary_key=True, nullable=False, autoincrement=True)
     name = db.Column(db.String(50), nullable=False)
-    employees = db.relationship("Employee", back_populates="transfusion_center")
-    requests = db.relationship("Request", back_populates="transfusion_center")
+    employees = db.relationship("Employee", back_populates="transfusionCenter")
+    requests = db.relationship("Request", back_populates="transfusionCenter")
 
     def __init__(self, name):
         self.name = name
@@ -90,41 +90,41 @@ class TransfusionCenter(db.Model):
 
 class Doctor(db.Model):
     __tablename__ = "doctor"
-    id_doctor = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
+    idDoctor = db.Column("id_doctor", db.Integer, primary_key=True, nullable=False, autoincrement=True)
     name = db.Column(db.String(30), nullable=False)
     surname = db.Column(db.String(30), nullable=False)
     email = db.Column("mail", db.String(30), nullable=False)
     password = db.Column(db.String(30), nullable=False)
     isActive = db.Column("is_active", db.Boolean, nullable=False, default=False)
-    id_hospital = db.Column(db.Integer, db.ForeignKey("hospital.id_hospital", ondelete="CASCADE"), nullable=False)
+    idHospital = db.Column("id_hospital", db.Integer, db.ForeignKey("hospital.id_hospital", ondelete="CASCADE"), nullable=False)
     hospital = db.relationship("Hospital", back_populates="doctors")
     requests = db.relationship("Request", back_populates="doctor")
 
-    def __init__(self, name, surname, email, password, id_hospital):
+    def __init__(self, name, surname, email, password, idHospital):
         self.name = name
         self.surname = surname
         self.email = email
         self.password = password
         self.isActive = False
-        self.id_hospital = id_hospital
+        self.idHospital = idHospital
 
 class Donation(db.Model):
     __tablename__ = "donation"
-    id_donation = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
+    idDonation = db.Column("id_donation", db.Integer, primary_key=True, nullable=False, autoincrement=True)
     bloodTest = db.Column(db.BLOB)
     date = db.Column(db.Date, nullable=False)
     quantity = db.Column(db.Float)
-    id_donor = db.Column(db.Integer, db.ForeignKey("donor.id_donor", ondelete="CASCADE"), nullable=False)
-    id_request = db.Column(db.Integer, db.ForeignKey("request.id_request", ondelete="CASCADE"), nullable=False)
+    idDonor = db.Column("id_donor", db.Integer, db.ForeignKey("donor.id_donor", ondelete="CASCADE"), nullable=False)
+    idRequest = db.Column("id_request", db.Integer, db.ForeignKey("request.id_request", ondelete="CASCADE"), nullable=False)
     donor = db.relationship("Donor", back_populates="donations")
     request = db.relationship("Request", back_populates="donations")
 
-    def __init__(self, bloodTest, date, quantity, id_donor, id_request):
+    def __init__(self, bloodTest, date, quantity, idDonor, idRequest):
         self.bloodTest = bloodTest
         self.date = date
         self.quantity = quantity
-        self.id_donor = id_donor
-        self.id_request = id_request
+        self.idDonor = idDonor
+        self.idRequest = idRequest
 
 
 if __name__ == "__main__":
