@@ -7,7 +7,7 @@ class Employee(db.Model):
     id_employee = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
     name = db.Column(db.String(30), nullable=False)
     surname = db.Column(db.String(30), nullable=False)
-    mail = db.Column(db.String(30), nullable=False)
+    email = db.Column("mail", db.String(30), nullable=False)
     password = db.Column(db.String(30), nullable=False)
     is_active = db.Column(db.Boolean, nullable=False, default=False)
     id_center = db.Column(db.Integer, db.ForeignKey("transfusion_center.id_center", ondelete="CASCADE"), nullable=False)
@@ -27,16 +27,16 @@ class Donor(db.Model):
     id_donor = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
     name = db.Column(db.String(30), nullable=False)
     surname = db.Column(db.String(30), nullable=False)
-    mail = db.Column(db.String(30), nullable=False)
+    email = db.Column("mail", db.String(30), nullable=False)
     password = db.Column(db.String(30), nullable=False)
     blood_type = db.Column(db.String(5), nullable=False)
     Rh = db.Column(db.Enum(DonorRhEnum), nullable=False)
     donations = db.relationship("Donation", back_populates="donor")
 
-    def __init__(self, name, surname, mail, password, blood_type, Rh):
+    def __init__(self, name, surname, e, password, blood_type, Rh):
         self.name = name
         self.surname = surname
-        self.mail = mail
+        self.email = email
         self.password = password
         self.blood_type = blood_type
         self.Rh = Rh
@@ -66,13 +66,14 @@ class Request(db.Model):
     donations = db.relationship("Donation", back_populates="request")
     doctor = db.relationship("Doctor", back_populates="requests")
 
-    def __init__(self, status, blood_type, Rh, receiving_person, quantity, id_doctor):
+    def __init__(self, blood_type, Rh, receiving_person, quantity, id_doctor, id_center):
         self.status = RequestStatusEnum.Donation
         self.blood_type = blood_type
         self.Rh = Rh
         self.receiving_person = receiving_person
         self.quantity = quantity
         self.id_doctor = id_doctor
+        self.id_center = id_center
 
 
 
@@ -92,17 +93,17 @@ class Doctor(db.Model):
     id_doctor = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
     name = db.Column(db.String(30), nullable=False)
     surname = db.Column(db.String(30), nullable=False)
-    mail = db.Column(db.String(30), nullable=False)
+    email = db.Column("mail", db.String(30), nullable=False)
     password = db.Column(db.String(30), nullable=False)
     is_active = db.Column(db.Boolean, nullable=False, default=False)
     id_hospital = db.Column(db.Integer, db.ForeignKey("hospital.id_hospital", ondelete="CASCADE"), nullable=False)
     hospital = db.relationship("Hospital", back_populates="doctors")
     requests = db.relationship("Request", back_populates="doctor")
 
-    def __init__(self, name, surname, mail, password, id_hospital):
+    def __init__(self, name, surname, email, password, id_hospital):
         self.name = name
         self.surname = surname
-        self.mail = mail
+        self.email = email
         self.password = password
         self.is_active = False
         self.id_hospital = id_hospital
