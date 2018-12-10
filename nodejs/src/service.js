@@ -663,7 +663,9 @@ class Service {
                     .then(records => {
                         callback(null, records.map(record => {
                             record.dataValues.email = record.dataValues.mail;
+                            record.dataValues.isActive = record.dataValues.is_active;
                             delete record.dataValues.mail;
+                            delete record.dataValues.is_active;
                             return record;
                         }));
 
@@ -688,7 +690,9 @@ class Service {
             .then(record => {
                 if (record) {
                     record.dataValues.email = record.dataValues.mail;
+                    record.dataValues.isActive = record.dataValues.is_active;
                     delete record.dataValues.mail;
+                    delete record.dataValues.is_active;
                     callback(null, record);
                 } else {
                     callback({message: 'Invalid doctor id ' + doctorId});
