@@ -1,4 +1,4 @@
-from server import app, db
+from server import app, db, jwt_required, get_jwt_identity
 from flask import request, jsonify
 from models import Donation, Employee, Hospital, Request, TransfusionCenter
 from schemas import DonationSchema, EmployeeSchema, HospitalSchema, RequestSchema, TransfusionCenterSchema
@@ -6,7 +6,11 @@ from schemas import DonationSchema, EmployeeSchema, HospitalSchema, RequestSchem
 
 @app.route("/employee", methods=['GET'], defaults={'employeeId': None})
 @app.route("/employee/<int:employeeId>", methods=['GET', 'DELETE'])
+@jwt_required
 def employee_api(employeeId):
+    current_user = get_jwt_identity()
+    if not current_user:
+        return jsonify({}), 401
     employee_schema = EmployeeSchema()
     employee_schema_many = EmployeeSchema(many=True)
 
@@ -26,11 +30,11 @@ def employee_api(employeeId):
             return jsonify({})
 
 
-@app.route("/hospital", methods=['GET', 'POST'], defaults={'hospitalId': None})
-@app.route("/hospital/<int:hospitalId>", methods=['GET', 'PUT', 'DELETE'])
-def hospital_api(hospitalId):
-    hospital_schema = HospitalSchema()
+@app.route("/hospital", methods=['GET'], defaults={"hospitalId": None})
+@app.route("/hospital/<int:hospitalId>", methods=['GET'])
+def hospital_api_unprotected(hospitalId):
     hospital_schema_many = HospitalSchema(many=True)
+    hospital_schema = HospitalSchema()
 
     if request.method == "GET":
         if hospitalId:
@@ -40,6 +44,11 @@ def hospital_api(hospitalId):
             hospitals = Hospital.query.all()
             return jsonify(hospital_schema_many.dump(hospitals).data)
 
+
+@app.route("/hospital", methods=['POST'], defaults={'hospitalId': None})
+@app.route("/hospital/<int:hospitalId>", methods=['PUT', 'DELETE'])
+@jwt_required
+def hospital_api(hospitalId):
     if request.method == "POST":
         hospital = Hospital(request.args.get('name'))
         db.session.add(hospital)
@@ -61,9 +70,9 @@ def hospital_api(hospitalId):
             return jsonify({})
 
 
-@app.route("/transfusionCenter", methods=['GET', 'POST'], defaults={'transfusionCenterId': None})
-@app.route("/transfusionCenter/<int:transfusionCenterId>", methods=['GET', 'PUT', 'DELETE'])
-def transfusion_center_api(transfusionCenterId):
+@app.route("/transfusionCenter", methods=['GET'], defaults={'transfusionCenterId': None})
+@app.route("/transfusionCenter/<int:transfusionCenterId>", methods=['GET'])
+def transfusion_center_api_unprotected(transfusionCenterId):
     transfusion_center_schema = TransfusionCenterSchema()
     transfusion_center_schema_many = TransfusionCenterSchema(many=True)
 
@@ -75,6 +84,11 @@ def transfusion_center_api(transfusionCenterId):
             transfusion_centers = TransfusionCenter.query.all()
             return jsonify(transfusion_center_schema_many.dump(transfusion_centers).data)
 
+
+@app.route("/transfusionCenter", methods=['POST'], defaults={'transfusionCenterId': None})
+@app.route("/transfusionCenter/<int:transfusionCenterId>", methods=['PUT', 'DELETE'])
+@jwt_required
+def transfusion_center_api(transfusionCenterId):
     if request.method == "POST":
         transfusion_center = TransfusionCenter(request.args.get('name'))
         db.session.add(transfusion_center)
@@ -98,6 +112,7 @@ def transfusion_center_api(transfusionCenterId):
 
 @app.route("/bloodRequest", methods=['GET', 'POST'], defaults={'requestId': None})
 @app.route("/bloodRequest/<int:requestId>", methods=['GET', 'PUT', 'DELETE'])
+@jwt_required
 def request_api(requestId):
     request_schema = RequestSchema()
     request_schema_many = RequestSchema(many=True)
@@ -149,8 +164,10 @@ def request_api(requestId):
         db.session.commit()
         return jsonify({})
 
+
 @app.route("/donation", methods=['GET', 'POST'], defaults={'donationId': None})
 @app.route("/donation/<int:donationId>", methods=['GET', 'PUT', 'DELETE'])
+@jwt_required
 def donation_api(donationId):
     donation_schema = DonationSchema()
     donation_schema_many = DonationSchema(many=True)
