@@ -1,4 +1,4 @@
-from server import app, db, jwt_required
+from server import app, db, jwt_required, create_access_token, decode_token, verify_jwt_in_request, get_jwt_identity
 from flask import request, jsonify
 from models import Donation, Employee, Hospital, Request, TransfusionCenter
 from schemas import DonationSchema, EmployeeSchema, HospitalSchema, RequestSchema, TransfusionCenterSchema
@@ -29,7 +29,11 @@ def employee_api(employeeId):
 
 @app.route("/hospital", methods=['GET'], defaults={"hospitalId": None})
 @app.route("/hospital/<int:hospitalId>", methods=['GET'])
+#@jwt_required
 def hospital_api_unprotected(hospitalId):
+    #access_token = create_access_token(identity="a")
+    #print decode_token(request.headers['Authorization'].split(" ")[1])
+    #print get_jwt_identity()
     hospital_schema_many = HospitalSchema(many=True)
     hospital_schema = HospitalSchema()
 
@@ -118,7 +122,7 @@ def request_api(requestId):
 
     if request.method == "GET":
         if requestId:
-            request_single = Request.query.get(requestId)
+            request_single = Request.query.cte(requestId)
             return jsonify(request_schema.dump(request_single).data)
         else:
             request_many = Request.query.all()
