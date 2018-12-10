@@ -514,7 +514,11 @@ class Service {
                         where: where
                     })
                     .then(records => {
-                        callback(null, records);
+                        callback(null, records.map(record => {
+                            record.dataValues.email = record.dataValues.mail;
+                            delete record.dataValues.mail;
+                            return record;
+                        }));
 
                         return null;
                     })
@@ -536,6 +540,8 @@ class Service {
             })
             .then(record => {
                 if (record) {
+                    record.dataValues.email = record.dataValues.mail;
+                    delete record.dataValues.mail;
                     callback(null, record);
                 } else {
                     callback({ message: 'Invalid donor id ' + donorId });
@@ -604,7 +610,7 @@ class Service {
                 //     callback({ message: 'Invalid `isActive` param.' });
                 // }
 
-                if (!_.isString(isActive) || !isActive.length || !['true', 'false'].includes(isActive.toLowerCase())) {
+                if (!_.isUndefined(isActive) && !(_.isString(isActive) && isActive.length && ['true', 'false'].includes(isActive.toLowerCase()))) {
                     callback({ message: 'Invalid `isActive` param.' });
                 }
 
@@ -612,7 +618,7 @@ class Service {
                 //     callback({ message: 'Invalid `hospitalId` param.' });
                 // }
 
-                if (!_.isString(hospitalId) || !hospitalId.length) {
+                if (!_.isUndefined(hospitalId) && !(_.isString(hospitalId) && !hospitalId.length)) {
                     callback({ message: 'Invalid `hospitalId` param.' });
                 }
 
@@ -655,7 +661,13 @@ class Service {
                         where: where
                     })
                     .then(records => {
-                        callback(null, records);
+                        callback(null, records.map(record => {
+                            record.dataValues.email = record.dataValues.mail;
+                            record.dataValues.isActive = record.dataValues.is_active;
+                            delete record.dataValues.mail;
+                            delete record.dataValues.is_active;
+                            return record;
+                        }));
 
                         return null;
                     })
@@ -677,6 +689,10 @@ class Service {
             })
             .then(record => {
                 if (record) {
+                    record.dataValues.email = record.dataValues.mail;
+                    record.dataValues.isActive = record.dataValues.is_active;
+                    delete record.dataValues.mail;
+                    delete record.dataValues.is_active;
                     callback(null, record);
                 } else {
                     callback({message: 'Invalid doctor id ' + doctorId});
