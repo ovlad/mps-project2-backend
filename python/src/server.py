@@ -2,7 +2,7 @@ import socket, importlib
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
-from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity, create_access_token
+from flask_jwt_extended import JWTManager, jwt_required
 
 
 config = importlib.import_module("."+socket.gethostname(), package="config")

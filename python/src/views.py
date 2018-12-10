@@ -1,4 +1,4 @@
-from server import app, db, jwt_required, get_jwt_identity, create_access_token
+from server import app, db, jwt_required
 from flask import request, jsonify
 from models import Donation, Employee, Hospital, Request, TransfusionCenter
 from schemas import DonationSchema, EmployeeSchema, HospitalSchema, RequestSchema, TransfusionCenterSchema
