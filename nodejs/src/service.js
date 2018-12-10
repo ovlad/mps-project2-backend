@@ -514,7 +514,11 @@ class Service {
                         where: where
                     })
                     .then(records => {
-                        callback(null, records);
+                        callback(null, records.map(record => {
+                            record.dataValues.email = record.dataValues.mail;
+                            delete record.dataValues.mail;
+                            return record;
+                        }));
 
                         return null;
                     })
@@ -536,6 +540,8 @@ class Service {
             })
             .then(record => {
                 if (record) {
+                    record.dataValues.email = record.dataValues.mail;
+                    delete record.dataValues.mail;
                     callback(null, record);
                 } else {
                     callback({ message: 'Invalid donor id ' + donorId });
@@ -655,7 +661,11 @@ class Service {
                         where: where
                     })
                     .then(records => {
-                        callback(null, records);
+                        callback(null, records.map(record => {
+                            record.dataValues.email = record.dataValues.mail;
+                            delete record.dataValues.mail;
+                            return record;
+                        }));
 
                         return null;
                     })
@@ -677,6 +687,8 @@ class Service {
             })
             .then(record => {
                 if (record) {
+                    record.dataValues.email = record.dataValues.mail;
+                    delete record.dataValues.mail;
                     callback(null, record);
                 } else {
                     callback({message: 'Invalid doctor id ' + doctorId});
