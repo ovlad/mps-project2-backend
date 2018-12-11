@@ -1,0 +1,24 @@
+{
+  "output": "./output",
+  "helpers": {
+    "Protractor": {
+      "angular": true,
+      "url": "https://mps2-frontend.firebaseapp.com",
+      "browser": "firefox"
+    },
+    "Utils": {
+      "require": "./helpers/utils_helper.js"
+    }
+  },
+  "include": {
+    "I": "./steps_file.js"
+  },
+  "mocha": {},
+  "bootstrap": false,
+  "teardown": null,
+  "hooks": [],
+  "gherkin": {},
+  "tests": "./*_test.js",
+  "timeout": 10000,
+  "name": "acceptance"
+}
