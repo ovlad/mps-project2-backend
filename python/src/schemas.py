@@ -15,7 +15,7 @@ class DonorSchema(ma.ModelSchema):
 class DonationSchema(ma.ModelSchema):
     donor = ma.Nested(DonorSchema)
     date = fields.DateTime(format="%d/%m/%Y")
-    request = ma.Nested('RequestSchema', only=("receivingPerson", "status"))
+    request = ma.Nested('RequestSchema', only=("receivingPerson", "status", "idRequest"))
 
     class Meta:
         model = Donation
