@@ -215,7 +215,7 @@ def donation_api(donationId):
             return jsonify(donation_schema.dump(donation_one).data)
 
     if request.method == "DELETE":
-        donation = Request.query.get(donationId)
+        donation = Donation.query.get(donationId)
         db.session.delete(donation)
         db.session.commit()
         return jsonify({})
