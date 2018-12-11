@@ -1,0 +1,11 @@
+{
+	"name": "acceptance_tests",
+	"version": "0.0.0",
+	"description": "Angular tests",
+	"dependencies": {
+		"mysql2": "^1.5.2"
+	},
+	"devDependencies": {
+		"mysql2": "^1.5.2"
+	}
+}
