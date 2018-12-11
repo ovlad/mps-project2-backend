@@ -2,6 +2,7 @@ from server import app, db
 from flask import request, jsonify
 from models import Donation, Employee, Hospital, Request, TransfusionCenter
 from schemas import DonationSchema, EmployeeSchema, HospitalSchema, RequestSchema, TransfusionCenterSchema
+from enums import RequestStatusEnum, DonorRhEnum
 from datetime import datetime
 
 
@@ -122,7 +123,15 @@ def request_api(requestId):
             request_result = list(request_many)
             for entry in request.args:
                 for request_one in request_many:
-                    if str(request.args.get(entry)) != str(getattr(request_one, entry)):
+                    left = str(request.args.get(entry))
+                    if entry == "rh":
+                        try:
+                            right = str(getattr(request_one, entry).value)
+                        except AttributeError:
+                            right = None
+                    else:
+                        right = str(getattr(request_one, entry))
+                    if left != right:
                         try:
                             request_result.remove(request_one)
                         except ValueError:
@@ -176,7 +185,6 @@ def donation_api(donationId):
             donation_result = list(donation_many)
             for entry in request.args:
                 for donation_one in donation_many:
-                    print request.args.get(entry), getattr(donation_one, entry)
                     if str(request.args.get(entry)) != str(getattr(donation_one, entry)):
                         try:
                             donation_result.remove(donation_one)
