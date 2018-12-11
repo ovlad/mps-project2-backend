@@ -3,8 +3,8 @@ FROM nginx:stable
 RUN apt-get update -qq
 
 # add ssh certificate to the image
-COPY ssl/35.188.36.73.crt /etc/ssl/35.188.36.73/35.188.36.73.crt
-COPY ssl/35.188.36.73.key /etc/ssl/35.188.36.73/35.188.36.73.key
+COPY ssl/certificate.crt /etc/ssl/35.188.36.73/35.188.36.73.crt
+COPY ssl/private.key /etc/ssl/35.188.36.73/35.188.36.73.key
 
 # include nginx configuration
 COPY nginx.live.conf /etc/nginx/nginx.conf
