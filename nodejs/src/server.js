@@ -205,6 +205,22 @@ app.delete('/doctor/:doctorId', verifyToken, (req, res) => {
     });
 });
 
+app.get('/hospital', (req, res) => {
+    res.sendStatus(403);
+});
+
+app.get('/hospital/*', (req, res) => {
+    res.sendStatus(403);
+});
+
+app.get('/transfusionCenter', (req, res) => {
+    res.sendStatus(403);
+});
+
+app.get('/transfusionCenter/*', (req, res) => {
+    res.sendStatus(403);
+});
+
 app.get('*', verifyToken, (req, res) => {
     res.sendStatus(403);
 });
