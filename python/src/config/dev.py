@@ -6,7 +6,3 @@ DATABASE_CONFIG = {
     'port': 3306,
 	'ssl_ca': 'src/ssl/BaltimoreCyberTrustRoot.crt.pem'
 }
-
-JWT_CONFIG = {
-	'JWT_SECRET_KEY': 'secret123'
-}

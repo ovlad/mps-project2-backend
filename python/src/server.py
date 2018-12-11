@@ -2,7 +2,6 @@ import socket, importlib
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
-from flask_jwt_extended import JWTManager, jwt_required, create_access_token, decode_token, verify_jwt_in_request, get_jwt_identity
 
 
 config = importlib.import_module("."+socket.gethostname(), package="config")
@@ -20,11 +19,9 @@ db_connect_string = "mysql://" + db_user + ":" + db_password + "@" + db_host + "
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = db_connect_string
 app.config['SQLALCHEMY_POOL_RECYCLE'] = 100
-app.config['JWT_SECRET_KEY'] = config.JWT_CONFIG['JWT_SECRET_KEY']
 
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
-jwt = JWTManager(app)
 
 
 if __name__ == "__main__":

@@ -1,12 +1,12 @@
-from server import app, db, jwt_required, create_access_token, decode_token, verify_jwt_in_request, get_jwt_identity
+from server import app, db
 from flask import request, jsonify
 from models import Donation, Employee, Hospital, Request, TransfusionCenter
 from schemas import DonationSchema, EmployeeSchema, HospitalSchema, RequestSchema, TransfusionCenterSchema
 from datetime import datetime
 
+
 @app.route("/employee", methods=['GET'], defaults={'employeeId': None})
 @app.route("/employee/<int:employeeId>", methods=['GET', 'DELETE'])
-#@jwt_required
 def employee_api(employeeId):
     employee_schema = EmployeeSchema()
     employee_schema_many = EmployeeSchema(many=True)
@@ -29,11 +29,7 @@ def employee_api(employeeId):
 
 @app.route("/hospital", methods=['GET'], defaults={"hospitalId": None})
 @app.route("/hospital/<int:hospitalId>", methods=['GET'])
-#@jwt_required
 def hospital_api_unprotected(hospitalId):
-    #access_token = create_access_token(identity="a")
-    #print decode_token(request.headers['Authorization'].split(" ")[1])
-    #print get_jwt_identity()
     hospital_schema_many = HospitalSchema(many=True)
     hospital_schema = HospitalSchema()
 
@@ -48,7 +44,6 @@ def hospital_api_unprotected(hospitalId):
 
 @app.route("/hospital", methods=['POST'], defaults={'hospitalId': None})
 @app.route("/hospital/<int:hospitalId>", methods=['PUT', 'DELETE'])
-#@jwt_required
 def hospital_api(hospitalId):
     hospital_schema = HospitalSchema()
     if request.method == "POST":
@@ -89,7 +84,6 @@ def transfusion_center_api_unprotected(transfusionCenterId):
 
 @app.route("/transfusionCenter", methods=['POST'], defaults={'transfusionCenterId': None})
 @app.route("/transfusionCenter/<int:transfusionCenterId>", methods=['PUT', 'DELETE'])
-#@jwt_required
 def transfusion_center_api(transfusionCenterId):
     transfusion_center_schema = TransfusionCenterSchema()
     if request.method == "POST":
@@ -115,7 +109,6 @@ def transfusion_center_api(transfusionCenterId):
 
 @app.route("/bloodRequest", methods=['GET', 'POST'], defaults={'requestId': None})
 @app.route("/bloodRequest/<int:requestId>", methods=['GET', 'PUT', 'DELETE'])
-#@jwt_required
 def request_api(requestId):
     request_schema = RequestSchema()
     request_schema_many = RequestSchema(many=True)
@@ -170,7 +163,6 @@ def request_api(requestId):
 
 @app.route("/donation", methods=['GET', 'POST'], defaults={'donationId': None})
 @app.route("/donation/<int:donationId>", methods=['GET', 'PUT', 'DELETE'])
-#@jwt_required
 def donation_api(donationId):
     donation_schema = DonationSchema()
     donation_schema_many = DonationSchema(many=True)
@@ -184,6 +176,7 @@ def donation_api(donationId):
             donation_result = list(donation_many)
             for entry in request.args:
                 for donation_one in donation_many:
+                    print request.args.get(entry), getattr(donation_one, entry)
                     if str(request.args.get(entry)) != str(getattr(donation_one, entry)):
                         try:
                             donation_result.remove(donation_one)

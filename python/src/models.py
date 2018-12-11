@@ -24,7 +24,7 @@ class Employee(db.Model):
 
 class Donor(db.Model):
     __tablename__ = "donor"
-    id_donor = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
+    idDonor = db.Column("id_donor", db.Integer, primary_key=True, nullable=False, autoincrement=True)
     name = db.Column(db.String(30), nullable=False)
     surname = db.Column(db.String(30), nullable=False)
     email = db.Column("mail", db.String(30), nullable=False)
