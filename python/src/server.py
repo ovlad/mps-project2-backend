@@ -5,7 +5,7 @@ from flask_marshmallow import Marshmallow
 from flask_jwt_extended import JWTManager, jwt_required, create_access_token, decode_token, verify_jwt_in_request, get_jwt_identity
 
 
-config = importlib.import_module("."+"live", package="config")
+config = importlib.import_module("."+socket.gethostname(), package="config")
 
 db_host = config.DATABASE_CONFIG['host']
 db_name = config.DATABASE_CONFIG['dbname']
