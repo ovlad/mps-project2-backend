@@ -40,6 +40,10 @@ function verifyToken(req, res, next) {
 // app.get('/', (req, res) => res.sendStatus(405));
 // app.get('/', (req, res) => res.send("Hello World! This is a greeting from the NodeJS API!"));
 
+app.get('/.well-known/acme-challenge/QHpqNC61nz0rsfyrJhSWtB62PRkCUhmWtWy0U9hsCUY', (req, res) => {
+    res.sendFile(__dirname +'/QHpqNC61nz0rsfyrJhSWtB62PRkCUhmWtWy0U9hsCUY');
+});
+
 // POST /login
 app.post('/login', (req, res) => {
     const body = req.query || {};
