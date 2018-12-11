@@ -2,7 +2,7 @@ from server import app, db, jwt_required, create_access_token, decode_token, ver
 from flask import request, jsonify
 from models import Donation, Employee, Hospital, Request, TransfusionCenter
 from schemas import DonationSchema, EmployeeSchema, HospitalSchema, RequestSchema, TransfusionCenterSchema
-
+from datetime import datetime
 
 @app.route("/employee", methods=['GET'], defaults={'employeeId': None})
 @app.route("/employee/<int:employeeId>", methods=['GET', 'DELETE'])
@@ -194,10 +194,11 @@ def donation_api(donationId):
     if request.method == "POST":
         quantity = request.args.get('quantity')
         date = request.args.get('date')
+        formatted_date = datetime.strptime(date, "%d/%m/%Y")
         donor_id = request.args.get('donorId')
         request_id = request.args.get('requestId')
         blood_test = request.get_data()
-        new_donation = Donation(blood_test, date, quantity, donor_id, request_id)
+        new_donation = Donation(blood_test, formatted_date, quantity, donor_id, request_id)
         db.session.add(new_donation)
         db.session.commit()
         return jsonify(donation_schema.dump(new_donation).data)
@@ -206,7 +207,8 @@ def donation_api(donationId):
         if donationId:
             donation_one = Donation.query.get(donationId)
             donation_one.quantity = request.args.get('quantity')
-            donation_one.date = request.args.get('date')
+            formatted_date = datetime.strptime(request.args.get('date'), "%d/%m/%Y")
+            donation_one.date = formatted_date
             donation_one.idDonor = request.args.get('donorId')
             donation_one.idRequest = request.args.get('requestId')
             db.session.commit()

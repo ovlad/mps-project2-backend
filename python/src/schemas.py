@@ -1,5 +1,6 @@
 from server import ma
 from marshmallow_enum import EnumField
+from marshmallow import fields
 from enums import RequestStatusEnum, DonorRhEnum
 from models import Doctor, Donation, Donor, Employee, Hospital, Request, TransfusionCenter
 
@@ -13,6 +14,7 @@ class DonorSchema(ma.ModelSchema):
 
 class DonationSchema(ma.ModelSchema):
     donor = ma.Nested(DonorSchema)
+    date = fields.DateTime(format="%d/%m/%Y")
 
     class Meta:
         model = Donation

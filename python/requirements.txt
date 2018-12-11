@@ -6,4 +6,5 @@ flask-marshmallow
 pyjwt
 marshmallow-sqlalchemy
 marshmallow-enum
+marshmallow
 flask-jwt-extended
